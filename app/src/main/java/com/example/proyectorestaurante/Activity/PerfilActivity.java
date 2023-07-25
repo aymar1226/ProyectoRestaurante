@@ -6,45 +6,51 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.example.proyectorestaurante.Clases.Usuario;
 import com.example.proyectorestaurante.R;
 
-
 public class PerfilActivity extends AppCompatActivity {
-
-    TextView nombre, apellido, correo, dni;
-
-    int idUsuario;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
 
-        nombre = findViewById(R.id.nombrepe);
-        apellido = findViewById(R.id.apellidope);
-        correo = findViewById(R.id.correope);
-        dni = findViewById(R.id.dni);
+        ImageView imageViewBack = findViewById(R.id.imageViewBack);
+        TextView textViewPresionar = findViewById(R.id.textViewPresionar);
+        imageViewBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
-        idUsuario =1;
+        textViewPresionar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Acción para ir a otra página XML (otra actividad)
+                Intent intent = new Intent(PerfilActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
 
-        Usuario usuario = Usuario.obtenerUsuario(idUsuario);
+
+    }
+
+    private void actualizarInterfaz(Usuario usuario) {
         if (usuario != null) {
-            nombre.setText("Nombres: "+usuario.getNombre());
-            apellido.setText("Apellidos: "+usuario.getApellido());
-            correo.setText("correo: "+usuario.getCorreo());
-            dni.setText("DNI: "+usuario.getDni());
+            TextView textViewNombre = findViewById(R.id.textViewNombre);
+            TextView textViewApellido = findViewById(R.id.textViewApellido);
+            TextView textViewCorreo = findViewById(R.id.textViewCorreo);
+
+            // Actualizar los TextView con los datos del usuario
+            textViewNombre.setText(usuario.getNombre());
+            textViewApellido.setText(usuario.getApellido());
+            textViewCorreo.setText(usuario.getCorreo());
         } else {
-            nombre.setText("Usuario no encontrado");
-            apellido.setText("Usuario no encontrado");
-            correo.setText("Usuario no encontrado");
-            dni.setText("Usuario no encontrado");
+            // Mostrar un mensaje de error o hacer otra acción si no se encuentra el usuario.
         }
-
-
-
     }
     public void irAInicio(View view) {
         Intent intent = new Intent(PerfilActivity.this, PrincipalActivity.class);
