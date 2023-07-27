@@ -1,14 +1,16 @@
-package com.example.proyectorestaurante;
+package com.example.proyectorestaurante.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class ejemplo extends AppCompatActivity {
+import com.example.proyectorestaurante.R;
+
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ejemplo);
+        setContentView(R.layout.activity_main);
     }
 }

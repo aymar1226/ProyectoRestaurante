@@ -27,9 +27,6 @@
             android:name=".activities.ModificarPersonal"
             android:exported="false" />
         <activity
-            android:name=".ejemplo"
-            android:exported="false" />
-        <activity
             android:name=".activities.Crud_Personal"
             android:exported="false" />
         <activity
