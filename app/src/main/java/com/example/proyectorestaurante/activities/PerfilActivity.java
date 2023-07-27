@@ -39,6 +39,7 @@ public class PerfilActivity extends AppCompatActivity {
         cerrar.setOnClickListener(view -> {
             sessionManager.cerrarSesion();
             Intent intent = new Intent(PerfilActivity.this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         });
         obtenerNombreUsuario();

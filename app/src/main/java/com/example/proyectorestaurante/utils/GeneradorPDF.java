@@ -301,8 +301,11 @@ public class GeneradorPDF {
                 // Crear celdas para la imagen y la información del plato
                 Cell imageCell = new Cell();
                 imageCell.addStyle(cellStyle);
+                imageCell.setMarginBottom(30); // Espacio entre celdas
                 Cell infoCell = new Cell();
                 infoCell.addStyle(cellStyle);
+                infoCell.setMarginBottom(30); // Espacio entre celdas
+
 
                 //Agregar el contenido a las celdas
                 infoCell.add(platoInfo);

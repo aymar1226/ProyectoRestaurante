@@ -29,19 +29,23 @@
             android:orientation="vertical"
             app:layout_constraintStart_toEndOf="@id/imagen_personal"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="20dp">
+            android:layout_marginStart="20dp"
+            >
             <TextView
                 android:id="@+id/nombre_personal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Nombre"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"/>
             <TextView
                 android:id="@+id/cargo_personal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rol"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:textColor="@color/colorSelected"/>
         </LinearLayout>
 
     </LinearLayout>

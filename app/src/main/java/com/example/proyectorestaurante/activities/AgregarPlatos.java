@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.proyectorestaurante.utils.ConexionDB;
 import com.example.proyectorestaurante.utils.ImageUploader;
 import com.example.proyectorestaurante.R;
+import com.example.proyectorestaurante.utils.SessionManager;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AgregarPlatos extends AppCompatActivity {
-
+    private SessionManager sessionManager;
     EditText nombre,descripcion,precio_plato;
     Button btninsert,selectImagenButton;
     Spinner spinnerPlato;
@@ -40,7 +41,7 @@ public class AgregarPlatos extends AppCompatActivity {
         nombre = findViewById(R.id.txtNombre);
         descripcion = findViewById(R.id.txtDescripcion);
         precio_plato = findViewById(R.id.precio);
-        btninsert =findViewById(R.id.btnAdd);
+        btninsert = findViewById(R.id.btnAdd);
         spinnerPlato = findViewById(R.id.spinner_categoria);
         selectImagenButton = findViewById(R.id.btn_select_image);
 
@@ -60,7 +61,6 @@ public class AgregarPlatos extends AppCompatActivity {
         });
 
 
-
         Connection connection = ConexionDB.obtenerConexion();
 
         //Obtener Categorias
@@ -69,8 +69,10 @@ public class AgregarPlatos extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categoria);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPlato.setAdapter(adapter);
+        sessionManager = new SessionManager(getApplicationContext());
 
         btninsert.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 String txt_nombre = nombre.getText().toString();
@@ -87,14 +89,15 @@ public class AgregarPlatos extends AppCompatActivity {
                     String categoriaquery="SELECT id_categoria FROM categoria where nombre LIKE '%"+txt_categoria+"%'";
                     Statement st = connection.createStatement();
                     ResultSet resultSet = st.executeQuery(categoriaquery);
+                    String idUsuario = sessionManager.obtenerId();
                     String idcategoria="";
                     if (resultSet.next()) {
                         idcategoria = resultSet.getString("id_categoria");
                     }
 
                     if (connection != null) {
-                        String sqlinsert="INSERT INTO plato (nombre, descripcion,precio,id_categoria,imagen)" +
-                                "VALUES ('"+txt_nombre+"', '"+txt_descripcion+"','"+precio+"','"+idcategoria+"','"+imagen_name+"')";
+                        String sqlinsert="INSERT INTO plato (nombre, descripcion,precio,id_categoria,imagen,id_usuario)" +
+                                "VALUES ('"+txt_nombre+"', '"+txt_descripcion+"','"+precio+"','"+idcategoria+"','"+imagen_name+"','"+idUsuario+"')";
                         int rowsAffected = st.executeUpdate(sqlinsert);
                         if (rowsAffected > 0) {
                             Toast.makeText(getApplicationContext(), "Plato agregado exitosamente", Toast.LENGTH_SHORT).show();
