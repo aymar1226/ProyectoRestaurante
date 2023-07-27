@@ -22,10 +22,16 @@ import java.util.List;
 
 public class AgregarPersonal extends AppCompatActivity {
 
+    //Se declaran las variables
+    //campos de entrada de texto
     private EditText nombre, apellido, cargo, direccion, telefono, dni;
+    //para el boton
     private Button btninsert;
+    //para la lista desplegable
     private Spinner spinner_personal;
 
+    //se realiza la configuración inicial de la actividad cuando se crea
+    //Se asocian las variables a los elementos de la interfaz a través de sus identificadores(R.id)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,19 +46,24 @@ public class AgregarPersonal extends AppCompatActivity {
 
         spinner_personal.setPrompt("cargo");
 
+        //Se obtiene una conexión a la base de datos utilizando el método
         Connection connection = ConexionDB.obtenerConexion();
 
-        //Cargar cargos en spinner
+        //Cargar cargos en spinner a través del método obtenerCargos():
         List<String> cargo;
         cargo = obtenerCargos(connection);
+        //Se crea un ArrayAdapter para el Spinner,
+        //utilizando la lista de nombres de cargos como fuente de datos,
+        //y se establece este adaptador en el Spinner.
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, cargo);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_personal.setAdapter(adapter);
 
-        //Crear personal
+        //Crear personal, que se activa cuando el usuario hace clic en el botón "Agregar":
         btninsert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Se obtienen los valores ingresados por el usuario en los campos de texto y en el Spinner.
                 String txt_nombre = nombre.getText().toString();
                 String txt_apellido = apellido.getText().toString();
                 String txt_direccion = direccion.getText().toString();
@@ -62,7 +73,7 @@ public class AgregarPersonal extends AppCompatActivity {
                 Connection connection = ConexionDB.obtenerConexion();
                 String imagen_name = "predet.jpg";
                 try {
-                    //Obtener el cargo del sepinner
+                    //Obtener el cargo del sepinner mediante una consulta en SQL
                     String cargoquery="SELECT id_cargo FROM cargo where nombre_cargo LIKE '%"+txt_cargo+"%'";
                     Statement st = connection.createStatement();
                     ResultSet resultSet = st.executeQuery(cargoquery);
@@ -70,7 +81,8 @@ public class AgregarPersonal extends AppCompatActivity {
                     if (resultSet.next()) {
                          idcargo = resultSet.getString("id_cargo");
                     }
-                    //Crear un nuevo personal
+                    //Crear un nuevo personal de la base de datos con los datos proporcionados
+                    // por el usuario, incluido el id_cargo obtenido previamente.
                     if (connection != null) {
                         String sqlinsert = "INSERT INTO personal (nombre, apellido, id_cargo, direccion, telefono,dni)" +
                                 "VALUES ('" + txt_nombre + "', '" + txt_apellido + "','" + idcargo + "','" + txt_direccion + "','" + txt_telefono + "','" + txt_dni + "')";
@@ -78,6 +90,8 @@ public class AgregarPersonal extends AppCompatActivity {
                         if (rowsAffected > 0) {
                             Toast.makeText(getApplicationContext(), "Personal agregado exitosamente", Toast.LENGTH_SHORT).show();
                             //Redirige al crud
+                            //Si la inserción es exitosa (si se afectan filas en la base de datos),
+                            // se muestra un mensaje de éxito y se redirige al usuario a otra actividad llamada Crud_Personal.
                             Intent intent = new Intent(AgregarPersonal.this, Crud_Personal.class);
                             startActivity(intent);
                         } else {
@@ -91,8 +105,11 @@ public class AgregarPersonal extends AppCompatActivity {
         });
     }
 
+    //El método obtenerCargos
+    // se utiliza para obtener una lista de nombres de cargos desde la base de datos:
     public List<String> obtenerCargos(Connection connection) {
 
+        //Se realiza una consulta SQL a la tabla cargo para obtener los nombres de los cargos.
         List<String> listaCargos = new ArrayList<>();
 
         try {

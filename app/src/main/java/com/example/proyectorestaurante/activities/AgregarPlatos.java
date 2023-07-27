@@ -26,6 +26,7 @@ import java.util.List;
 
 public class AgregarPlatos extends AppCompatActivity {
 
+    //Se declaran las variables
     EditText nombre,descripcion,precio_plato;
     Button btninsert,selectImagenButton;
     Spinner spinnerPlato;
@@ -33,6 +34,7 @@ public class AgregarPlatos extends AppCompatActivity {
     private StorageReference storageReference;
     ImageUploader imageUploader;
 
+    //Se asocian las variables a los elementos de la interfaz a través de sus identificadores(R.id)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +75,7 @@ public class AgregarPlatos extends AppCompatActivity {
         btninsert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Se obtienen los valores ingresados
                 String txt_nombre = nombre.getText().toString();
                 String txt_descripcion = descripcion.getText().toString();
                 double precio= Double.parseDouble(precio_plato.getText().toString());
