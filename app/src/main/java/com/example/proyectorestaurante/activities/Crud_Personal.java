@@ -82,11 +82,11 @@ public class Crud_Personal extends AppCompatActivity {
 
     }
     private void obtenerYMostrarTarjetas(Connection connection) {
-        String texto = txt_buscar.getText().toString();
+        String texto = txt_buscar.getText().toString().trim();
         String query;
         // Consulta SQL para seleccionar todos los registros de la tabla de usuarios
         if(buscarOn){
-            query = "SELECT id_personal, nombre, apellido, cargo.nombre_cargo, dni FROM personal INNER JOIN cargo on personal.id_cargo = cargo.id_cargo WHERE nombre LIKE '%" + texto + "%' OR apellido LIKE '%" + texto + "%'";
+            query = "SELECT id_personal, nombre, apellido, cargo.nombre_cargo, dni FROM personal INNER JOIN cargo on personal.id_cargo = cargo.id_cargo WHERE nombre LIKE '%" + texto + "%' OR apellido LIKE '%" + texto + "%' OR dni LIKE '%" + texto + "%'";
         }
         else {
             query = "SELECT id_personal, nombre, apellido, cargo.nombre_cargo, dni FROM personal INNER JOIN cargo on personal.id_cargo = cargo.id_cargo";

@@ -23,15 +23,6 @@
             android:src="@drawable/fotovacio"
             tools:ignore="MissingClass"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/nombre"
-            android:textColor="@color/btnVi"
-            android:textSize="20dp"
-            android:layout_marginTop="8dp"
-            android:textStyle="bold" />
-
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

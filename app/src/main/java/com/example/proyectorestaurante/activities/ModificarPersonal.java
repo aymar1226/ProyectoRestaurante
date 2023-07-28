@@ -24,6 +24,7 @@ import java.util.List;
 
 public class ModificarPersonal extends AppCompatActivity {
 
+    AgregarPersonal agregarPersonal;
     EditText txtnombre, txtapellido, txtdni, txtdireccion, txttelefono;
     ImageView editarImage;
     Button actualizarButton, agregarUsuario, eliminarUsuarioBtn;
@@ -52,6 +53,7 @@ public class ModificarPersonal extends AppCompatActivity {
         eliminarUsuarioBtn = findViewById(R.id.eliminarUsuario);
 
         editarImage = findViewById(R.id.editar_personal);
+        agregarPersonal = new AgregarPersonal();
 
         // Obtener el valor de id_personal de la intención
         Intent intent = getIntent();
@@ -140,33 +142,37 @@ public class ModificarPersonal extends AppCompatActivity {
                 String telefono = txttelefono.getText().toString();
                 String cargo = (String) spinnerCargo.getSelectedItem();
 
-                try {
-                    // Obtener id_cargo
-                    String cargoquery = "SELECT id_cargo FROM cargo WHERE nombre_cargo LIKE '%" + cargo + "%'";
-                    Statement st = connection.createStatement();
-                    ResultSet resultSet = st.executeQuery(cargoquery);
-                    String idcargo = null;
-                    if (resultSet.next()) {
-                        idcargo = resultSet.getString("id_cargo");
+                if(agregarPersonal.obtenerDnis(connection).contains(dni)){
+                    Toast.makeText(getApplicationContext(), "Ya existe el dni", Toast.LENGTH_SHORT).show();
+                }else {
+                    try {
+                        // Obtener id_cargo
+                        String cargoquery = "SELECT id_cargo FROM cargo WHERE nombre_cargo LIKE '%" + cargo + "%'";
+                        Statement st = connection.createStatement();
+                        ResultSet resultSet = st.executeQuery(cargoquery);
+                        String idcargo = null;
+                        if (resultSet.next()) {
+                            idcargo = resultSet.getString("id_cargo");
+                        }
+
+                        // Actualizar personal
+                        String query = "UPDATE personal SET nombre = '" + nombre + "', apellido = '" + apellido +
+                                "', dni = '" + dni + "', direccion = '" + direccion + "', telefono = '" + telefono +
+                                "', id_cargo = '" + idcargo + "' WHERE id_personal = " + id_personal;
+
+                        int rowsAffected = st.executeUpdate(query);
+                        if (rowsAffected > 0) {
+                            Toast.makeText(getApplicationContext(), "Personal actualizado exitosamente", Toast.LENGTH_SHORT).show();
+                            // Te redirige al crud personal
+                            Intent intent = new Intent(ModificarPersonal.this, Crud_Personal.class);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "No se pudo actualizar el personal", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } catch (Exception e) {
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-
-                    // Actualizar personal
-                    String query = "UPDATE personal SET nombre = '" + nombre + "', apellido = '" + apellido +
-                            "', dni = '" + dni + "', direccion = '" + direccion + "', telefono = '" + telefono +
-                            "', id_cargo = '" + idcargo + "' WHERE id_personal = " + id_personal;
-
-                    int rowsAffected = st.executeUpdate(query);
-                    if (rowsAffected > 0) {
-                        Toast.makeText(getApplicationContext(), "Personal actualizado exitosamente", Toast.LENGTH_SHORT).show();
-                        // Te redirige al crud personal
-                        Intent intent = new Intent(ModificarPersonal.this, Crud_Personal.class);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(getApplicationContext(), "No se pudo actualizar el personal", Toast.LENGTH_SHORT).show();
-                    }
-
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });

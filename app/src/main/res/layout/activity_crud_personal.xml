@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FBE9D6"
-    tools:context=".ejemplo">
+    tools:context=".activities.Crud_Personal">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_header"

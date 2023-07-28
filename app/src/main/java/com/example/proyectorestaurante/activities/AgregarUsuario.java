@@ -94,22 +94,27 @@ public class AgregarUsuario extends AppCompatActivity {
     }
 
     public boolean agregarUsuario(Connection connection, String correo, byte[] contraseña, int id_rol, int id_personal) {
-        try {
-            String query = "INSERT INTO usuario (correo, contraseña, id_rol, id_personal) VALUES (?,ENCRYPTBYPASSPHRASE('L4f4ry3t3nCrypt4d0', ?), ?, ?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            preparedStatement.setString(1, correo);
-            preparedStatement.setBytes(2, contraseña);
-            preparedStatement.setInt(3, id_rol);
-            preparedStatement.setInt(4, id_personal);
-
-            int rowsAffected = preparedStatement.executeUpdate();
-            preparedStatement.close();
-
-            return rowsAffected > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(obtenerCorreos(connection).contains(correo)){
+            Toast.makeText(getApplicationContext(), "Correo ya existente", Toast.LENGTH_SHORT).show();
             return false;
+        }else {
+            try {
+                String query = "INSERT INTO usuario (correo, contraseña, id_rol, id_personal) VALUES (?,ENCRYPTBYPASSPHRASE('L4f4ry3t3nCrypt4d0', ?), ?, ?)";
+                PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+                preparedStatement.setString(1, correo);
+                preparedStatement.setBytes(2, contraseña);
+                preparedStatement.setInt(3, id_rol);
+                preparedStatement.setInt(4, id_personal);
+
+                int rowsAffected = preparedStatement.executeUpdate();
+                preparedStatement.close();
+
+                return rowsAffected > 0;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
         }
     }
 
@@ -155,5 +160,25 @@ public class AgregarUsuario extends AppCompatActivity {
         return listarol;
 
     }
+    public List<String> obtenerCorreos(Connection connection){
+        List<String> listaCorreo = new ArrayList<>();
+        try {
+            String query = "SELECT correo FROM usuario";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+
+            while (resultSet.next()) {
+                String correo = resultSet.getString("correo");
+                listaCorreo.add(correo);
+            }
+            statement.close();
+            resultSet.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listaCorreo;
+    }
+
 }
 

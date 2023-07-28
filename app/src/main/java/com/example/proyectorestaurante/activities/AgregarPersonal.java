@@ -70,18 +70,22 @@ public class AgregarPersonal extends AppCompatActivity {
                     if (resultSet.next()) {
                          idcargo = resultSet.getString("id_cargo");
                     }
-                    //Crear un nuevo personal
-                    if (connection != null) {
-                        String sqlinsert = "INSERT INTO personal (nombre, apellido, id_cargo, direccion, telefono,dni)" +
-                                "VALUES ('" + txt_nombre + "', '" + txt_apellido + "','" + idcargo + "','" + txt_direccion + "','" + txt_telefono + "','" + txt_dni + "')";
-                        int rowsAffected = st.executeUpdate(sqlinsert);
-                        if (rowsAffected > 0) {
-                            Toast.makeText(getApplicationContext(), "Personal agregado exitosamente", Toast.LENGTH_SHORT).show();
-                            //Redirige al crud
-                            Intent intent = new Intent(AgregarPersonal.this, Crud_Personal.class);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(getApplicationContext(), "No se pudo agregar el personal", Toast.LENGTH_SHORT).show();
+                    if(obtenerDnis(connection).contains(txt_dni)){
+                        Toast.makeText(getApplicationContext(), "Ya existe el dni", Toast.LENGTH_SHORT).show();
+                    }else {
+                        //Crear un nuevo personal
+                        if (connection != null) {
+                            String sqlinsert = "INSERT INTO personal (nombre, apellido, id_cargo, direccion, telefono,dni)" +
+                                    "VALUES ('" + txt_nombre + "', '" + txt_apellido + "','" + idcargo + "','" + txt_direccion + "','" + txt_telefono + "','" + txt_dni + "')";
+                            int rowsAffected = st.executeUpdate(sqlinsert);
+                            if (rowsAffected > 0) {
+                                Toast.makeText(getApplicationContext(), "Personal agregado exitosamente", Toast.LENGTH_SHORT).show();
+                                //Redirige al crud
+                                Intent intent = new Intent(AgregarPersonal.this, Crud_Personal.class);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(getApplicationContext(), "No se pudo agregar el personal", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 } catch (Exception e) {
@@ -111,7 +115,26 @@ public class AgregarPersonal extends AppCompatActivity {
             e.printStackTrace();
         }
             return listaCargos;
+    }
 
+    public List<String> obtenerDnis(Connection connection){
+        List<String> listaDni = new ArrayList<>();
+        try {
+            String query = "SELECT dni FROM personal";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+
+            while (resultSet.next()) {
+                String dni = resultSet.getString("dni");
+                listaDni.add(dni);
+            }
+            statement.close();
+            resultSet.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listaDni;
     }
 
 }

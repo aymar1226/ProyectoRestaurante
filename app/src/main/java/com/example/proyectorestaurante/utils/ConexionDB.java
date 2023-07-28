@@ -7,7 +7,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConexionDB {
-    private static final String DB_URL = "jdbc:jtds:sqlserver://192.168.31.133:1433/restaurante";
+    private static final String DB_URL = "jdbc:jtds:sqlserver://10.218.106.111:1433/restaurante";
     private static final String DB_USER = "user1";
     private static final String DB_PASSWORD = "1234";
 

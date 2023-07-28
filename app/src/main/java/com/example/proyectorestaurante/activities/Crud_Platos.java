@@ -82,7 +82,7 @@ public class Crud_Platos extends AppCompatActivity {
     }
 
     private void obtenerYMostrarTarjetas(Connection connection) {
-        String texto = txt_buscar.getText().toString();
+        String texto = txt_buscar.getText().toString().trim();
         String query;
         // Consulta SQL para seleccionar todos los registros de la tabla de usuarios
         if(buscarOn){
